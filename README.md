@@ -1,7 +1,7 @@
 # CarND-Controls-MPC
 Self-Driving Car Engineer Nanodegree Program
 Author: Shanglin
-![img]()
+![img](https://github.com/shangliy/Car_MPC_Shawn/blob/master/sample/Screenshot%20from%20MPC_13.mp4.png?raw=true)
 [Video demo](https://youtu.be/i5VVcPQBY5g)
 ---
 
@@ -34,17 +34,17 @@ The smaller of N*dt, the shorter  distance within the prediction. If the distanc
 
 Thus, we need to choose the multiple based on the prediction line (Green line in images) with reasonable distance in front of the car. I find the N*dt = 1.3 is reasonbale.
 
-N = 20 dt =0.2 , distance (Green line) far enough, but high computation.
-![img]()
+**N = 20 dt =0.2 , distance (Green line) far enough, but high computation.**
+![img](https://github.com/shangliy/Car_MPC_Shawn/blob/master/sample/Screenshot%20from%20MPC_N20T02.mp4%20-%201.png?raw=true)
 
-N = 20 dt =0.2 , sometimes the long distance cause unreliable situation.
-![img]()
+**N = 20 dt =0.2 , sometimes the long distance cause unreliable situation.**
+![img](https://github.com/shangliy/Car_MPC_Shawn/blob/master/sample/Screenshot%20from%20MPC_N20T02.mp4%20-%203.png?raw=true)
 
-N = 10 dt =0.13 , distance (Green line)  is reasonable.
-![img]()
+**N = 10 dt =0.13 , distance (Green line)  is reasonable.**
+![img](https://github.com/shangliy/Car_MPC_Shawn/blob/master/sample/Screenshot%20from%20MPC_13.mp4.png?raw=true)
 
-N = 5 dt =0.1 , distance (Green line)  is too short, the car can not find the right path.
-![img]()
+**N = 5 dt =0.1 , distance (Green line)  is too short, the car can not find the right path.**
+![img](https://github.com/shangliy/Car_MPC_Shawn/blob/master/sample/Screenshot%20from%20MPC_N5T01.mp4.png?raw=true)
 
 ##### dt decision:
 Once, we decide the multiplication, then I test the dt. If the dt is small, the reaction time between two temporal stage is small which make the car react fast to the path change. But if the dt is too small, the care become unstable. From experience, when dt = 0.05, the car is unstable, if the dt =0.5, the car can not fit the path at time. After test, I choose dt = 0.13. Thus, N =10.
