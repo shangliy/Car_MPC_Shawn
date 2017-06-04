@@ -6,10 +6,10 @@ Author: Shanglin
 ---
 
 ## Rubric
-###Compilation
+### Compilation
 Code compile without errors with cmake and make.
-###Implementation
-####The Model
+### Implementation
+#### The Model
 I implement the MPC model in the MPC.cpp. 
 The state includes the location **x**, location **y**, angle **psi**, speed **v**, Cross Track Error **cte** and Orientation Error **epsi**. The dimension of state is **6**.
 The actuators include the speed acc **a** and sterring angle **delta**. The dimension is **2**.
@@ -27,7 +27,7 @@ Code implemention in MPC.cpp:
    >> AD<double> f_x0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * CppAD::pow(x0, 2) + coeffs[3] * CppAD::pow(x0, 3);  
    >> AD<double> psides0 = CppAD::atan(coeffs[1] + 2 * coeffs[2] * x0 + 3 * coeffs[3] * CppAD::pow(x0,2));  
    
-####Timestep Length and Frequency
+#### Timestep Length and Frequency
 ##### Basic rules:
  The multiple of N (timestep length) and dt (timestep frequency) values decide the length of prediction. 
 The larger of N*dt, the longer distance within the prediction.  On the one hand, it provide the car more info to control. On the other hand, the complexity of prediciton increase which make fit unreliable. Besides, the computation cost also increases.
@@ -50,7 +50,7 @@ Thus, we need to choose the multiple based on the prediction line (Green line in
 ##### dt decision:
 Once, we decide the multiplication, then I test the dt. If the dt is small, the reaction time between two temporal stage is small which make the car react fast to the path change. But if the dt is too small, the care become unstable. From experience, when dt = 0.05, the car is unstable, if the dt =0.5, the car can not fit the path at time. After test, I choose dt = 0.13. Thus, N =10.
 
-####Polynomial Fitting and MPC Preprocessing
+#### Polynomial Fitting and MPC Preprocessing
 
 #####  Polynomial Fitting:
 I use Polynomial fitting with degree = 3
