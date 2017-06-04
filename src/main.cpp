@@ -71,6 +71,8 @@ int main() {
   // MPC is initialized here!
   MPC mpc;
 
+
+
   h.onMessage([&mpc](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -117,13 +119,28 @@ int main() {
           double epsi = -atan(coeffs[1]);
 
           Eigen::VectorXd state_cur(6);
-          state_cur << 0, 0, 0, v, cte, epsi;
-          //auto vars = mpc.Solve(state, coeffs);
-          auto control = mpc.Solve(state_cur, coeffs);
           double steer_value;
           double throttle_value;
+
+          // Handle the latency
+          double dt = 0.1; // equivalent to 100ms the latency time
+          const double Lf = 2.67;
+          double Future_x = v * dt ;
+          double Future_y = 0 ;
+          double Future_psi =  - mpc.steer_value_pre * dt / Lf ;
+          std::cout << "v" << v << "mpc.steer_value_pre" << mpc.steer_value_pre << std::endl;
+          double Future_v = v + mpc.throttle_value_pre * dt;
+
+          state_cur << Future_x, Future_y, Future_psi, Future_v, cte, epsi;
+          auto control = mpc.Solve(state_cur, coeffs);
+
+
           steer_value = - control[0];
           throttle_value = control[1];
+
+          mpc.steer_value_pre = steer_value;
+          mpc.throttle_value_pre = throttle_value;
+
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;

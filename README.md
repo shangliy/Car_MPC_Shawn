@@ -88,7 +88,23 @@ Need to transform the world coordinates to Car coordinates
 >          fg[0] += 100 * CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);  
 >          fg[0] += 100 * CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);  
 >    }  
-3. The car work well with 100ms latency.  
+
+3. Algorithm to solve the latency:
+The implemented algorithm is to project the vehicle state 100ms into the future before calling the MPC.solve() function. Since the state variables are computed in vehicle coordinate system, the following projections could be made on the state variables. Record the **steer_value** and **throttle_value** using mpc.steer_value_pre and mpc.throttle_value_pre, then calculate the "predicted" value considering the latency.
+
+> dt = 0.1 // equivalent to 100ms  
+> Future_x = v * dt;  
+> Future_y = 0;  
+> Future_psi = -  mpc.steer_value_pre / Lf * dt;  
+> Future_v = v + mpc.throttle_value_pre * dt;  
+
+After that, I put the predicted future value in MPC.solve() function.
+
+> state_cur << Future_x, Future_y, Future_psi, Future_v, cte, epsi;  
+> auto control = mpc.Solve(state_cur, coeffs);  
+
+
+4. The car work well with 100ms latency.  
  
  
 #### Simulation

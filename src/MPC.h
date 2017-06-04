@@ -13,6 +13,9 @@ class MPC {
   vector<double> x_pres;
   vector<double> y_pres;
 
+  double steer_value_pre = 0;
+  double throttle_value_pre = 0;
+
 
   virtual ~MPC();
 
